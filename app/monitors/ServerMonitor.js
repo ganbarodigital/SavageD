@@ -1,9 +1,13 @@
-// Copyright (c) 2013 Mediasift Ltd
+// Copyright (c) 2013-2015 Mediasift Ltd
+// Copyright (c) 2015-present Ganbaro Digital Ltd
 // All rights reserved
 
 // our built-in includes
 var fs   = require("fs");
 var util = require("util");
+
+// our base class
+var BaseMonitor = require("./BaseMonitor");
 
 // our third-party includes
 var _        = require("underscore");
@@ -51,7 +55,7 @@ function ServerMonitor(appServer) {
 	// listen for timer events
 }
 module.exports = ServerMonitor;
-util.inherits(ServerMonitor, dsCommon.dsFeature);
+util.inherits(ServerMonitor, BaseMonitor);
 
 // ========================================================================
 //
@@ -87,6 +91,9 @@ ServerMonitor.prototype.onGetPluginsList = function(req, res, next) {
 // ------------------------------------------------------------------------
 
 ServerMonitor.prototype.onGetServerPlugin = function(req, res, next) {
+	// what are we doing?
+	this.logRequest(req);
+
 	// does this alias exist?
 	if (this.aliases[req.params.alias] === undefined) {
 		res.send(404, { error: "no such alias" });
@@ -104,6 +111,9 @@ ServerMonitor.prototype.onGetServerPlugin = function(req, res, next) {
 };
 
 ServerMonitor.prototype.onPostServerPlugin = function(req, res, next) {
+	// what are we doing?
+	this.logRequest(req);
+
 	// self-reference
 	var self = this;
 
@@ -138,6 +148,9 @@ ServerMonitor.prototype.onPostServerPlugin = function(req, res, next) {
 };
 
 ServerMonitor.prototype.onDeleteServerPlugin = function(req, res, next) {
+	// what are we doing?
+	this.logRequest(req);
+
 	// self-reference
 	var self = this;
 

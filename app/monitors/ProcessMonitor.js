@@ -1,9 +1,13 @@
 // Copyright (c) 2013 Mediasift Ltd
+// Copyright (c) 2015-present Ganbaro Digital Ltd
 // All rights reserved
 
 // our built-in includes
 var fs   = require("fs");
 var util = require("util");
+
+// our base class
+var BaseMonitor = require("./BaseMonitor");
 
 // our third-party includes
 var _        = require("underscore");
@@ -61,7 +65,7 @@ function ProcessMonitor(appServer) {
 	this.plugins = {};
 }
 module.exports = ProcessMonitor;
-util.inherits(ProcessMonitor, dsCommon.dsFeature);
+util.inherits(ProcessMonitor, BaseMonitor);
 
 // ========================================================================
 //
@@ -110,7 +114,7 @@ ProcessMonitor.prototype.hasProcessPid = function(alias) {
 
 ProcessMonitor.prototype.onGetProcessPid = function(req, res, next) {
 	// what are we doing?
-	this.logInfo("HTTP GET /process/" + req.params.alias + "/pid");
+	this.logRequest(req);
 
 	// do we have this process currently in our list?
 	if (!this.hasProcessPid(req.params.alias)) {
@@ -125,7 +129,7 @@ ProcessMonitor.prototype.onGetProcessPid = function(req, res, next) {
 
 ProcessMonitor.prototype.onPostProcessPid = function(req, res, next) {
 	// what are we doing?
-	this.logInfo("HTTP POST /process/" + req.params.alias + "/" + req.params.pid);
+	this.logRequest(req);
 
 	// do we have a pid at all?
 	if (req.params.pid === undefined) {
@@ -162,7 +166,7 @@ ProcessMonitor.prototype.onPostProcessPid = function(req, res, next) {
 
 ProcessMonitor.prototype.onDeleteProcessPid = function(req, res, next) {
 	// what are we doing?
-	this.logInfo("HTTP DELETE /process/" + req.params.alias + "/pid");
+	this.logRequest(req);
 
 	// is this PID being monitored?
 	if (this.aliases[req.params.alias] === undefined) {
@@ -186,7 +190,7 @@ ProcessMonitor.prototype.onDeleteProcessPid = function(req, res, next) {
 
 ProcessMonitor.prototype.onGetProcessPlugin = function(req, res, next) {
 	// what are we doing?
-	this.logInfo("HTTP GET /process/" + req.params.alias + "/" + req.params.plugin);
+	this.logRequest(req);
 
 	// does this alias exist?
 	if (this.aliases[req.params.alias] === undefined) {
@@ -209,7 +213,7 @@ ProcessMonitor.prototype.onPostProcessPlugin = function(req, res, next) {
 	var self = this;
 
 	// what are we doing?
-	this.logInfo("HTTP POST /process/" + req.params.alias + "/" + req.params.plugin);
+	this.logRequest(req);
 
 	// does this alias exist?
 	if (this.aliases[req.params.alias] === undefined) {
@@ -253,7 +257,7 @@ ProcessMonitor.prototype.onDeleteProcessPlugin = function(req, res, next) {
 	var self = this;
 
 	// what are we doing?
-	this.logInfo("HTTP DELETE /process/" + req.params.alias + "/" + req.params.plugin);
+	this.logRequest(req);
 
 	// does this alias exist?
 	if (this.aliases[req.params.alias] === undefined) {
