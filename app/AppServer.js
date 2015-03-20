@@ -5,8 +5,8 @@
 var util = require("util");
 var _ = require("underscore");
 var dsCommon = require("dsCommon");
-var ProcessMonitor = require("./ProcessMonitor");
-var ServerMonitor  = require("./ServerMonitor");
+var ProcessMonitor = require("./monitors/ProcessMonitor");
+var ServerMonitor  = require("./monitors/ServerMonitor");
 
 // our main app server
 //
@@ -16,7 +16,7 @@ var ServerMonitor  = require("./ServerMonitor");
 function AppServer() {
 	// call our parent constructor
 	AppServer.super_.call(this, {
-		name: "proc2statsd"
+		name: "savaged"
 	});
 
 	this.filesToMonitor = {};
