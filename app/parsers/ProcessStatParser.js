@@ -4,13 +4,13 @@
 var fs = require("fs");
 var _ = require("underscore");
 
-function PidStatParser()
+function ProcessStatParser()
 {
 	// does nothing
 }
-module.exports = PidStatParser;
+module.exports = ProcessStatParser;
 
-PidStatParser.prototype.retrieveStats = function(filename) {
+ProcessStatParser.prototype.retrieveStats = function(filename) {
 	// self-reference
 	var self = this;
 
