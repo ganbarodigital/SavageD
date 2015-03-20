@@ -14,6 +14,7 @@ The name _SavageD_ is a tribute to [Adam Savage](http://en.wikipedia.org/wiki/Ad
 New BSD License
 
 Copyright (c) 2013, MediaSift Ltd
+Portions (c) 2015-present Ganbaro Digital Ltd
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
