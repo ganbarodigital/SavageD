@@ -49,7 +49,7 @@ ProcessMemory.prototype.reportUsage = function(pid, alias) {
 	// at this point, we have data to send to statsd
 	_.each(results, function(value, name) {
 		if (name.match(/^Vm/)) {
-			self.appServer.statsManager.count(alias + ".memory." + name, value);
+			self.appServer.statsManager.gauge(alias + ".memory." + name, value);
 		}
 	});
 

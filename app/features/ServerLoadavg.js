@@ -45,6 +45,6 @@ ServerLoadavg.prototype.reportUsage = function(alias) {
 
 	// at this point, we have data to send to statsd
 	_.each(results, function(value, name) {
-		self.appServer.statsManager.count(alias + ".loadavg." + name, value);
+		self.appServer.statsManager.gauge(alias + ".loadavg." + name, value);
 	});
 };

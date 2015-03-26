@@ -47,7 +47,7 @@ ProcessThreads.prototype.reportUsage = function(pid, alias) {
 	var processStats = self.appServer.getLatestDataFor(filename);
 
 	// at this point, we have data to send to statsd
-	self.appServer.statsManager.count(alias + ".process.threads", processStats.num_threads);
+	self.appServer.statsManager.gauge(alias + ".process.threads", processStats.num_threads);
 
 	// all done
 };

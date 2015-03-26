@@ -55,7 +55,7 @@ ServerCpu.prototype.reportUsage = function(alias) {
 	// at this point, we have data to send to statsd
 	_.each(stats.percentages, function(cpu, cpuName) {
 		_.each(cpu, function(value, fieldName) {
-			self.appServer.statsManager.count(alias + ".cpu." + cpuName + "." + fieldName, value);
+			self.appServer.statsManager.gauge(alias + ".cpu." + cpuName + "." + fieldName, value);
 		});
 	});
 };

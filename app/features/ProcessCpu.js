@@ -95,7 +95,7 @@ ProcessCpu.prototype.reportUsage = function(pid, alias) {
 
 	// at this point, we have data to send to statsd
 	_.each(percentageStats, function(value, name) {
-		self.appServer.statsManager.count(alias + ".cpu." + name, value);
+		self.appServer.statsManager.gauge(alias + ".cpu." + name, value);
 	});
 };
 
