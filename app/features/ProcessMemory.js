@@ -1,6 +1,16 @@
-// our includes
+// Copyright (c) 2013 Mediasift Ltd
+// All rights reserved
+
+// our built-in includes
+var fs   = require("fs");
 var util = require("util");
+
+// our third-party includes
+var _        = require("underscore");
 var dsCommon = require("dsCommon");
+
+// our parser
+var ProcessStatusParser = require("../parsers/ProcessStatusParser");
 
 function ProcessMemory(appServer) {
 	// call our parent constructor
@@ -8,32 +18,40 @@ function ProcessMemory(appServer) {
 		name: "ProcessMemory"
 	});
 
-	// our routes
-	appServer.httpManager.routes.ProcessMemory = {
-		"put": [
-			{
-				route: "/process/:pid/memory",
-				handler: this.onGetProcessMemory.bind(this)
-			}
-		]
-	};
-
-	// our processes to monitor
-	this.pids = [];
-
-	// listen for timer events
-	appServer.on('every1sec', this.onTimer.bind(this));
+	// add ourselves to the list of available plugins
+	appServer.processMonitor.addPlugin("memory", this);
 }
 module.exports = ProcessMemory;
 util.inherits(ProcessMemory, dsCommon.dsFeature);
 
-ProcessMemory.prototype.onGetProcessMemory = function(req, res, next) {
-	this.logNotice("onGetProcessMemory() successfully called");
-
-	res.send(200);
-	return next();
+ProcessMemory.prototype.getFilenamesToMonitor = function(pid) {
+	return [
+		{
+			filename: "/proc/" + pid + "/status",
+			parser:   new ProcessStatusParser()
+		}
+	];
 };
 
-ProcessMemory.prototype.onTimer = function() {
-	// get the memory information we need
+ProcessMemory.prototype.reportUsage = function(pid, alias) {
+	// self-reference
+	var self = this;
+
+	// what are we doing?
+	// this.logInfo("report memory usage of PID " + pid + " as alias " + alias);
+
+	// we can get the information we need from the process's status file
+	var filename = "/proc/" + pid + "/status";
+
+	// get the parsed data
+	var results = self.appServer.getLatestDataFor(filename);
+
+	// at this point, we have data to send to statsd
+	_.each(results, function(value, name) {
+		if (name.match(/^Vm/)) {
+			self.appServer.statsManager.gauge(alias + ".memory." + name, value);
+		}
+	});
+
+	// all done
 };
