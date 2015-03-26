@@ -14,11 +14,6 @@ if which python26 > /dev/null 2>&1 ; then
 	PYTHON=python26
 fi
 
-# special case, for when we start via vagrant / ansible
-if [[ `id -un` == "vagrant" ]]; then
-	cd $HOME/SavageD
-fi
-
 # special case - if we have no node_modules, go and get them
 if [[ ! -d ./node_modules ]] ; then
 	echo "Installing our dependencies first"
@@ -29,7 +24,7 @@ function start() {
 	if ! is_running ; then
 		# start the process
 		echo "Starting SavageD in a screen"
-		screen -d -m -S SavageD node ./server.js ./config.js
+		screen -d -m -L -S SavageD node ./server.js ./config.js
 
 		# did it start?
 		sleep 1
@@ -156,6 +151,7 @@ function selfMonitor() {
 	# activate all known server plugins
 	curl -X POST http://localhost:8091/server/$serv_alias/loadavg
 	curl -X POST http://localhost:8091/server/$serv_alias/cpu
+	curl -X POST http://localhost:8091/server/$serv_alias/io
 
 	# switch on monitoring, in case it was switched off
 	curl -X POST http://localhost:8091/stats/monitoring -d 'monitoring=true'
@@ -193,6 +189,7 @@ function stopSelfMonitor() {
 	# stop all known server plugins
 	curl -X DELETE http://localhost:8091/server/$serv_alias/loadavg
 	curl -X DELETE http://localhost:8091/server/$serv_alias/cpu
+	curl -X DELETE http://localhost:8091/server/$serv_alias/io
 
 	# switch off monitoring
 	curl -X POST http://localhost:8091/stats/monitoring -d 'monitoring=false'

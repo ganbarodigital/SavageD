@@ -4,14 +4,15 @@
 		"ProcessMemory": {},
 		"ProcessThreads": {},
 		"ServerCpu": {},
+		"ServerDiskstats": {},
 		"ServerLoadavg": {}
 	},
 	"httpServer": {
 		"port": "8091"
 	},
 	"stats": {
-		"host": "172.16.221.153",
-		"port": 8123,
-		"prefix": "qa"
+		"host": "172.28.128.3",
+		"port": 8125,
+		"prefix": "assurance"
 	}
 }
