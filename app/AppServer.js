@@ -106,6 +106,13 @@ AppServer.prototype.onTimer = function() {
 		return;
 	}
 
+	// is monitoring currently enabled?
+	var config = this.configManager.config;
+	if (config.stats === undefined || config.stats.monitoring === undefined || !config.stats.monitoring) {
+		// currently disabled
+		return;
+	}
+
 	// console.log(this.filesToMonitor);
 
 	// get the latest data from all of the files that we are tracking
